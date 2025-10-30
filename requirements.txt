@@ -1,0 +1,6 @@
+streamlit
+Pandas
+numpy
+re
+plotly
+plotly.express
