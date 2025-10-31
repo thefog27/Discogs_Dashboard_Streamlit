@@ -81,9 +81,12 @@ def vis_distribution(category):
 
     #dc_distribution_styles = dataframes.get(category)
 
-        df_split_genres = df_split_genres[(df_split_genres['styles'].isin(styles_filter) if styles_filter else df_split_genres['styles'].notna()) &
-                 (df_split_genres['genres'].isin(genres_filter) if genres_filter else df_split_genres['genres'].notna()) &
-                 #(df_split_genres['year'].isin(year_filter) if year_filter else df_split_genres['year'].notna()) &
+        df_split_genres = df_split_genres[
+                 (df_split_genres['styles'].apply(lambda x: all(re.search(rf'\b{re.escape(term)}\b', str(x)) for term in styles_filter)) if styles_filter else df_split_genres['styles'].notna()) &
+                 (df_split_genres['genres'].apply(lambda x: all(re.search(rf'\b{re.escape(term)}\b', str(x)) for term in genres_filter)) if genres_filter else df_split_genres['genres'].notna()) &
+                #  (df_split_genres['styles'].isin(styles_filter) if styles_filter else df_split_genres['styles'].notna()) &
+                #  (df_split_genres['genres'].isin(genres_filter) if genres_filter else df_split_genres['genres'].notna()) &
+                # (df_split_genres['year'].isin(year_filter) if year_filter else df_split_genres['year'].notna()) &
                  ((df_split_genres['year'] >= start_jahr) & (df_split_genres['year'] <= end_jahr) if year_filter else df_split_genres['year'].notna()) &
                  (df_split_genres['label'].isin(label_filter) if label_filter else df_split_genres['label'].notna()) &
                  (df_split_genres['artist'].isin(artist_filter) if artist_filter else df_split_genres['artist'].notna()) &
@@ -101,10 +104,13 @@ def vis_distribution(category):
     #elif category == 'styles':
     else:
 
-        df_split_styles = df_split_styles[(df_split_styles['styles'].isin(styles_filter) if styles_filter else df_split_styles['styles'].notna()) &
-                        (df_split_styles['genres'].isin(genres_filter) if genres_filter else df_split_styles['genres'].notna()) &
-                        #(df_split_styles['year'].isin(year_filter) if year_filter else df_split_styles['year'].notna()) &
-                        #((df['year'] >= start_jahr) & (df['year'] <= end_jahr) if year_filter else True) &
+        df_split_styles = df_split_styles[
+                        (df_split_styles['styles'].apply(lambda x: all(re.search(rf'\b{re.escape(term)}\b', str(x)) for term in styles_filter)) if styles_filter else df_split_styles['styles'].notna()) &
+                        (df_split_styles['genres'].apply(lambda x: all(re.search(rf'\b{re.escape(term)}\b', str(x)) for term in genres_filter)) if genres_filter else df_split_styles['genres'].notna()) &
+                        # (df_split_styles['styles'].isin(styles_filter) if styles_filter else df_split_styles['styles'].notna()) &
+                        # (df_split_styles['genres'].isin(genres_filter) if genres_filter else df_split_styles['genres'].notna()) &
+                        # (df_split_styles['year'].isin(year_filter) if year_filter else df_split_styles['year'].notna()) &
+                        # ((df['year'] >= start_jahr) & (df['year'] <= end_jahr) if year_filter else True) &
                         ((df_split_styles['year'] >= start_jahr) & (df_split_styles['year'] <= end_jahr) if year_filter else df_split_styles['year'].notna()) &
                         (df_split_styles['label'].isin(label_filter) if label_filter else df_split_styles['label'].notna()) &
                         (df_split_styles['artist'].isin(artist_filter) if artist_filter else df_split_styles['artist'].notna()) &
@@ -214,9 +220,8 @@ def vis_share(category, color):
 # Title
 st.title('Discogs Dashboard')
 
-#data = r'C:\Users\Nebel\OneDrive\Dokumente\GitHub_Projects\Discogs\discogs_data_latest.csv'
-#data = st.secrets['file_path']
-data = 'discogs_data_latest.csv'
+data = st.secrets['file_path']
+#data = 'discogs_data_latest.csv'
 
 # session_state
 #if 'df' not in st.session_state:
@@ -320,6 +325,19 @@ df = df[df['styles'].apply(lambda x: all(re.search(rf'\b{re.escape(term)}\b', st
         (df['Collection vs. Wantlist'].isin(collection_wantlist_filter) if collection_wantlist_filter else True) &
         (df['Reissue/Remaster'].isin(remaster_reissue_filter) if remaster_reissue_filter else True)
             ]
+        # Ternary Operator
+
+# df = df[(df['styles'].isin(styles_filter) if styles_filter else df['styles'].notna()) &
+#         (df['genres'].isin(genres_filter) if genres_filter else df['genres'].notna()) &
+#         # df['styles'].apply(lambda x: all(re.search(rf'\b{re.escape(term)}\b', str(x)) for term in styles_filter)) &
+#         # df['genres'].apply(lambda x: all(re.search(rf'\b{re.escape(term)}\b', str(x)) for term in genres_filter)) &
+#         #(df['year'].isin(year_filter) if year_filter else True) &
+#         ((df['year'] >= start_jahr) & (df['year'] <= end_jahr) if year_filter else True) &
+#         (df['label'].isin(label_filter) if label_filter else True) &
+#         (df['artist'].isin(artist_filter) if artist_filter else True) &
+#         (df['Collection vs. Wantlist'].isin(collection_wantlist_filter) if collection_wantlist_filter else True) &
+#         (df['Reissue/Remaster'].isin(remaster_reissue_filter) if remaster_reissue_filter else True)
+#             ]
         # Ternary Operator
 
 
